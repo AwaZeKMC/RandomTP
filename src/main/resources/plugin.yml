@@ -1,0 +1,8 @@
+name: RandomTP
+version: ${project.version}
+main: fr.awazek.RandomTP
+authors: [ AwaZeK ]
+commands:
+  randomtp:
+    aliases:
+      - rtp
