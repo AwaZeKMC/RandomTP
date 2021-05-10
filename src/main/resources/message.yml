@@ -4,8 +4,8 @@ remaining-time:
   seconds: "the remaining time is %seconds% seconds"
   available: "You can use NOW the /RTP"
 time-between:
-  actionbar: 60 #in seconds
-  rtp: 3 #only in hours
-rtp: #is an arc of circle
+  actionbar: 60 #in seconds # the time between the display
+  rtp: 3 #only in hours#time between the 2 random teleportation
+rtp: #is a circle radius
   min: 1000
   max: 5000

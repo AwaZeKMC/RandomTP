@@ -1,11 +1,9 @@
 package fr.awazek.command;
 
+import fr.awazek.RTPLocation;
 import fr.awazek.RandomTP;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -33,10 +31,11 @@ public class RandomTPCommand implements CommandExecutor {
 
                 Player player = (Player) sender;
 
-                Location surfaceLocation = player.getLocation();
-                surfaceLocation.setY(250);
-                while (isSafetyLocation(surfaceLocation) == false) {
-                    surfaceLocation = getSurfaceLocation(newLocation(player.getWorld()));
+                RTPLocation surfaceLocation = newLocation(player.getWorld());
+
+
+                while (!surfaceLocation.isSafe()) {
+                    surfaceLocation = newLocation(player.getWorld());
                 }
 
                 SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy / HH:mm:ss");
@@ -105,33 +104,11 @@ public class RandomTPCommand implements CommandExecutor {
     }
 
 
-    public boolean isSafetyLocation(Location location) {
-        Block underBlock = location.add(0, -1, 0).getBlock();
-        if (underBlock.getType().equals(Material.LAVA)
-                || underBlock.getType().equals(Material.STATIONARY_LAVA)
-                || underBlock.getType().equals(Material.WATER)
-                || underBlock.getType().equals(Material.STATIONARY_WATER)
-                || underBlock.getType().equals(Material.AIR)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
-    public Location getSurfaceLocation(Location location){
-        Location newLocation = new Location(location.getWorld(), location.getX(), 256, location.getZ());
 
-        for (int i = 150; i > 0; i--) {
-            newLocation.setY(i);
-            if (!newLocation.getBlock().getType().equals(Material.AIR)){
 
-                return newLocation.add(0, 1,0);
-            }
-        }
-        return newLocation;
-    }
 
-    public Location newLocation(World world){
+    public RTPLocation newLocation(World world){
         Random random = new Random();
         int X;
         int Y;
@@ -144,7 +121,7 @@ public class RandomTPCommand implements CommandExecutor {
             Z = random.nextInt(main.getTextConfig().getInt("rtp.max"));
             len = (int) Math.sqrt((X*X) + (Z*Z));
             if (len > main.getTextConfig().getInt("rtp.min") && len < main.getTextConfig().getInt("rtp.max")){
-                return new Location(world , X, Y , Z);
+                return new RTPLocation(world , X, Y , Z);
             }
         }
         return null;
